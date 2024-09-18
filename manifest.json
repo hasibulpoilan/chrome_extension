@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Tab Title Fetcher",
+    "version": "1.0",
+    "action": {
+      "default_popup": "popup.html",
+      "default_title": "Fetch Tab Title"
+    },
+    "permissions": ["tabs"],
+    "background": {
+      "service_worker": "background.js"
+    }
+  }
+  
