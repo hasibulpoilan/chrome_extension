@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tab Title Fetcher</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>LinkedIn Profile Scraper</title>
 </head>
+<link rel="stylesheet" href="styles.css">
+
 <body>
-  <h1>Tab Title Fetcher</h1>
-  <button id="fetch-title">Get Tab Title</button>
-  <p id="title-display">Title will appear here</p>
+  <h3>Enter LinkedIn Profile URLs (comma separated):</h3>
+  <input type="text" id="profileUrls" placeholder="Enter LinkedIn URLs here" />
+  <button id="scrapeProfiles">Scrape Profiles</button>
 
   <script src="popup.js"></script>
 </body>
+
 </html>
