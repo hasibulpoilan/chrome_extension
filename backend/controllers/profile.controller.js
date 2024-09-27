@@ -1,27 +1,28 @@
-const db = require("../backend/models");
-const Profile = db.profile;
+const db = require('../models');
+const Profile = db.profile; // Assuming profile.model.js defines the Profile model
 
-
-exports.create = async (req, res) => {
-  try {
-    const { name, url, about, bio, location, follower_count, connection_count } = req.body;
-
-    if (!name || !url) {
-      return res.status(400).send({ message: "Name and URL cannot be empty!" });
-    }
-
-    const profile = await Profile.create({
-      name,
-      url,
-      about,
-      bio,
-      location,
-      follower_count: follower_count || 0,
-      connection_count: connection_count || 0
-    });
-
-    res.send(profile);
-  } catch (error) {
-    res.status(500).send({ message: error.message || "Some error occurred while creating the profile." });
+// POST controller to create a new profile
+exports.create = (req, res) => {
+  if (!req.body.name) {
+    res.status(400).send({ message: "Content cannot be empty!" });
+    return;
   }
+
+  const profile = {
+    name: req.body.name,
+    url: req.body.url,
+    about: req.body.about,
+    bio: req.body.bio,
+    location: req.body.location,
+    followerCount: req.body.followerCount,
+    connectionCount: req.body.connectionCount,
+  };
+
+  Profile.create(profile)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message || "Some error occurred while creating the profile." });
+    });
 };

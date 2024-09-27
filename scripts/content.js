@@ -1,33 +1,47 @@
-(function () {
-
-  window.onload = () => {
-    try {
-      const name = document.querySelector(".pv-top-card .text-heading-xlarge").innerText;
-      const location = document.querySelector(".pv-top-card .text-body-small").innerText;
-      const about = document.querySelector(".pv-about-section").innerText;
-      const bio = document.querySelector(".text-body-medium").innerText;
-      const followerCount = parseInt(document.querySelector(".follower-count").innerText.replace(/\D/g, ''));
-      const connectionCount = parseInt(document.querySelector(".t-16.t-black.t-bold").innerText.replace(/\D/g, ''));
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'startLikingCommenting') {
+    const { likeCount, commentCount } = request;
 
 
-      fetch('http://localhost:8080/api/profiles', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name,
-          location,
-          about,
-          bio,
-          follower_count: followerCount || 0,
-          connection_count: connectionCount || 0,
-          url: window.location.href
-        })
-      }).then(response => console.log("Profile data posted!"))
-        .catch(error => console.error("Error posting profile data:", error));
-    } catch (error) {
-      console.error("Error scraping profile data:", error);
-    }
-  };
-})();
+    window.location.href = 'https://www.linkedin.com/feed/';
+
+
+    window.addEventListener('load', () => {
+
+      function likePosts(count) {
+        const posts = document.querySelectorAll('.react-button');
+        const selectedPosts = [...posts].sort(() => 0.5 - Math.random()).slice(0, count);
+
+        selectedPosts.forEach((post) => {
+          post.click();
+        });
+      }
+
+
+      function commentOnPosts(count) {
+        const commentButtons = document.querySelectorAll('.comment-button');
+        const selectedComments = [...commentButtons].sort(() => 0.5 - Math.random()).slice(0, count);
+
+        selectedComments.forEach((button, index) => {
+          button.click();
+          setTimeout(() => {
+            const commentBox = document.querySelector('.comment-box');
+            if (commentBox) {
+              commentBox.value = 'CFBR';
+              const postButton = commentBox.closest('.comment-form').querySelector('.post-comment-button');
+              if (postButton) {
+                postButton.click();
+              }
+            } else {
+              console.error("Comment box not found");
+            }
+          }, index * 2000);
+        });
+      }
+
+
+      likePosts(likeCount);
+      commentOnPosts(commentCount);
+    });
+  }
+});
